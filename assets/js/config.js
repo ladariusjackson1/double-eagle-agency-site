@@ -1,8 +1,16 @@
 /*
   SITE SETTINGS
-  Edit the values below. Everything on every page updates from here.
+  Edit the values below. The pages read them from here.
+  siteUrl is also copied into the HTML head, robots.txt, and sitemap.xml
+  when you run scripts/apply-site-url.mjs.
 */
 window.SITE_CONFIG = {
+  // Production origin, with no trailing slash.
+  // TODO: this repository does not include the real domain. Leave this empty
+  // until you have it, then run: node scripts/apply-site-url.mjs
+  // Example: "https://example.com"
+  siteUrl: "",
+
   // Founding client spots still open. Change to 2, then 1, then 0 as you sign clients.
   // At 0 the page switches to "All founding spots are taken."
   foundingSpotsLeft: 3,

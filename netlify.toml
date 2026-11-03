@@ -1,5 +1,9 @@
 [build]
   publish = "."
+  command = "node scripts/apply-site-url.mjs"
+
+[build.environment]
+  NODE_VERSION = "22"
 
 [[headers]]
   for = "/assets/*"

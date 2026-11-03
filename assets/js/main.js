@@ -18,6 +18,51 @@
   }
   $$("[data-year]").forEach(function (el) { el.textContent = new Date().getFullYear(); });
 
+  // Absolute URLs in the head follow siteUrl. Empty until the real domain is set.
+  if (cfg.siteUrl && /^https?:\/\//.test(cfg.siteUrl) && location.protocol !== "file:") {
+    var origin = String(cfg.siteUrl).replace(/\/+$/, "");
+    var path = location.pathname || "/";
+    if (path.endsWith("/index.html")) path = path.slice(0, -"index.html".length);
+    if (path.charAt(0) !== "/") path = "/" + path;
+    var canonicalUrl = origin + path;
+
+    var canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement("link");
+      canonical.rel = "canonical";
+      document.head.appendChild(canonical);
+    }
+    canonical.href = canonicalUrl;
+
+    if (document.querySelector('meta[property="og:title"]')) {
+      [
+        ["property", "og:url", canonicalUrl],
+        ["property", "og:image", origin + "/assets/img/og-image.png"],
+        ["name", "twitter:image", origin + "/assets/img/og-image.png"]
+      ].forEach(function (spec) {
+        var el = document.head.querySelector('meta[' + spec[0] + '="' + spec[1] + '"]');
+        if (!el) {
+          el = document.createElement("meta");
+          el.setAttribute(spec[0], spec[1]);
+          document.head.appendChild(el);
+        }
+        el.setAttribute("content", spec[2]);
+      });
+    }
+
+    var ld = document.querySelector('script[type="application/ld+json"]');
+    if (ld) {
+      try {
+        var data = JSON.parse(ld.textContent);
+        data.url = canonicalUrl;
+        data.image = origin + "/assets/img/og-image.png";
+        ld.textContent = JSON.stringify(data);
+      } catch (err) {
+        /* Leave authored JSON-LD in place if it is not JSON. */
+      }
+    }
+  }
+
   /* ---------- Founding spots counter ---------- */
   var left = Number(cfg.foundingSpotsLeft);
   var total = Number(cfg.foundingSpotsTotal) || 3;
