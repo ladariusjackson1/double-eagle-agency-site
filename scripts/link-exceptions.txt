@@ -1,0 +1,6 @@
+# One absolute URL per line. Blank lines and comments are ignored.
+# Each entry must match a link that is still on the site. Remove the line when the link works again.
+#
+# The sample contractor site in the demo section. assets/js/config.js notes that
+# Netlify returned "Site not found" on Oct 10, 2026. The link stays in the page.
+https://thriving-stroopwafel-8fcd8a.netlify.app
